@@ -19,22 +19,80 @@ fly1[,12] <- (fly1[,5])
 fly1[,13] <- (fly1[,5])
 
 FlyPositionX.1 <- subset(fly1[2:11739,], select=c("Time", "FlyPosX.1", "RelativePosX"))
-movement <- subset(fly1[3:nrow(fly1),], select=c("Time", "FlyPosX.1", "RelativePosX"))
-names(movement)[c(1,2,3)] <- c("Time", "FlyPosX.2","RelativePosX")
+movement_fly1 <- subset(fly1[3:nrow(fly1),], select=c("Time", "FlyPosX.1", "RelativePosX"))
+names(movement_fly1)[c(1,2,3)] <- c("Time", "FlyPosX.2","RelativePosX")
 
 #calculate distance between pos2-pos1, pos3-pos2 etc., sum and average
-movement [ ,4] <- (movement[,2]-FlyPositionX.1[,2])
-names(movement)[c(1,2,3,4)] <- c("Time", "FlyPosX.2", "RelativePosX", "difference_X.2-X.1")
+movement_fly1 [ ,4] <- (movement_fly1[,2]-FlyPositionX.1[,2])
+names(movement_fly1)[c(1,2,3,4)] <- c("Time", "FlyPosX.2", "RelativePosX", "difference_X.2-X.1")
 
-#select different time intervals
-#1. preference plot: movement across time up until first odor choice (0-1min), during odor choice (1-3)
-time.spent.oct.preference
-time.spent.mch.preference <- if(movement$RelativePosX<0, )
+-------------------------------------------------------------------------------------------------------
+#time score: time spent in odor A during test interval (time_odorA/time_interval)x100%
+#1. untrained vs. trained preference plot: movement during odor choice (1-3) vs. movement during test odor choice (18-20)
+#FLY1
+#subset of time interval 1-3
+untrained_preference <- subset(fly1, Time >=1 & Time <3, select=c(RelativePosX,Time))
+#subset of time interval 18-20
+trained_preference <- subset(fly1, Time >=18 & Time <20,select=c(RelativePosX,Time) )
 
+#untrained: subset of MCH
+average_time_MCH <- subset(untrained_preference, RelativePosX< -5, select=c(RelativePosX,Time))
+#untrained: subset of OCT
+average_time_OCT <- subset(untrained_preference, RelativePosX>5, select=c(RelativePosX,Time))
+#untrained: subset of grey zone (10% of total area [200])
+average_time_grey <- subset(untrained_preference, RelativePosX>=-5 & RelativePosX<=5, select=c(RelativePosX,Time))
+
+#trained: subset of OCT
+average_time_OCT <- subset(trained_preference, RelativePosX< -5, select=c(RelativePosX,Time))
+#trained: subset of MCH
+average_time_MCH <- subset(trained_preference, RelativePosX>5, select=c(RelativePosX,Time))
+#untrained: subset of grey zone (5% of total area [200])
+average_time_grey <- subset(trained_preference, RelativePosX>=-5 & RelativePosX<=5, select=c(RelativePosX,Time))
+
+
+#FLY2
+#subset of time interval 1-3
+untrained_preference <- subset(fly2, Time >=1 & Time <3, select=c(RelativePosX,Time))
+#subset of time interval 18-20
+trained_preference <- subset(fly2, Time >=18 & Time <20,select=c(RelativePosX,Time) )
+
+#untrained: subset of MCH
+average_time_MCH <- subset(untrained_preference, RelativePosX< -5, select=c(RelativePosX,Time))
+#untrained: subset of OCT
+average_time_OCT <- subset(untrained_preference, RelativePosX>5, select=c(RelativePosX,Time))
+#untrained: subset of grey zone (10% of total area [200])
+average_time_grey <- subset(untrained_preference, RelativePosX>=-5 & RelativePosX<=5, select=c(RelativePosX,Time))
+
+#trained: subset of OCT
+average_time_OCT <- subset(trained_preference, RelativePosX< -5, select=c(RelativePosX,Time))
+#trained: subset of MCH
+average_time_MCH <- subset(trained_preference, RelativePosX>5, select=c(RelativePosX,Time))
+#untrained: subset of grey zone (5% of total area [200])
+average_time_grey <- subset(trained_preference, RelativePosX>=-5 & RelativePosX<=5, select=c(RelativePosX,Time))
+
+#FLY3
+#subset of time interval 1-3
+untrained_preference <- subset(fly3, Time >=1 & Time <3, select=c(RelativePosX,Time))
+#subset of time interval 18-20
+trained_preference <- subset(fly3, Time >=18 & Time <20,select=c(RelativePosX,Time) )
+
+#untrained: subset of MCH
+average_time_MCH <- subset(untrained_preference, RelativePosX< -5, select=c(RelativePosX,Time))
+#untrained: subset of OCT
+average_time_OCT <- subset(untrained_preference, RelativePosX>5, select=c(RelativePosX,Time))
+#untrained: subset of grey zone (10% of total area [200])
+average_time_grey <- subset(untrained_preference, RelativePosX>=-5 & RelativePosX<=5, select=c(RelativePosX,Time))
+
+#trained: subset of OCT
+average_time_OCT <- subset(trained_preference, RelativePosX< -5, select=c(RelativePosX,Time))
+#trained: subset of MCH
+average_time_MCH <- subset(trained_preference, RelativePosX>5, select=c(RelativePosX,Time))
+#untrained: subset of grey zone (5% of total area [200])
+average_time_grey <- subset(trained_preference, RelativePosX>=-5 & RelativePosX<=5, select=c(RelativePosX,Time))
 #learning indices/training-induced avoidance change: time score and decision score
 #subtract post-training preference from pre-training preference
 #decision score: at least one decision made within 2min period (filter out immobile flies)
-#time score: time spent in odor A during test interval (time_odorA/time_interval)x100%
+#time score: 
 #decision score: decisions in favor of odor A during test interval; decision=every time fly enters and exits the central choice zone,
 #entry into odor A from central choice zone (decisions_odorA/decisions_interval)x100%
 #untrained preference: during first odor choice before electric shock
